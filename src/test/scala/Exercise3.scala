@@ -6,13 +6,18 @@ case class City(name: String)
 object LivesIn {
 
   // TODO: implement sequencial unapply
-  def unapply(person: Person): Option[Seq[String]] = ???
+  def unapply(person: Person): Option[Seq[String]] =
+    Some(
+      for(city <- person.residence)
+        yield city.name
+    )
 }
 
 class SequenceContains(value: String) {
 
   // TODO: implement boolean unapply
-  def unapply(strings: Seq[String]): Boolean = ???
+  def unapply(strings: Seq[String]): Boolean =
+    strings.contains(value)
 }
 
 class Exercise3 extends FlatSpec{

@@ -6,14 +6,18 @@ import scala.None
   * MyNotes.txt => MyNotes txt
   */
 object FileName {
-  def unapply(name: String): Option[(String, String)] = ???
+  def unapply(name: String): Option[(String, String)] = {
+    val parts = name.split("\\.")
+    if (parts.length == 2) Some(parts(0), parts(1)) else None
+  }
 }
 
 /**
   * /home/anyuser/development/scala/ => scala development anyuser home
   */
 object Path {
-  def unapplySeq(path: String): Option[Seq[String]] = ???
+  def unapplySeq(path: String): Option[Seq[String]] =
+    Some(path.split("/").reverse.dropRight(1))
 }
 
 class Exercise2 extends FlatSpec{
@@ -21,7 +25,10 @@ class Exercise2 extends FlatSpec{
   /**
     * /home/anyuser/git/scala-foo/scala-cop-extractors/README.txt => README
     */
-  def fileFromAbsolutePath(path: String) = ???
+  def fileFromAbsolutePath(path: String) = path match {
+    case Path(FileName(name, _), _*) => name
+    case _ => "No match"
+  }
 
 
   "file name" should "match correct name and extension" in {

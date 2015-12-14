@@ -15,7 +15,17 @@ object CompanyAddress {
   /**
     * TODO: Implement User => (name, company domain name, epost domain name)
     */
-  def unapply(user: User): Option[(String, String, String)] = ???
+  def unapply(user: User): Option[(String, String, String)] = {
+    user match {
+      case GkUser(_, address) =>
+        val parts: Array[String] = address.split("\\@")
+        val namePart = parts.head
+        val companyPart = parts.last.split("\\.").head
+        val epdPart = parts.last.split("\\.").drop(1).mkString(".")
+        Some((namePart, companyPart, epdPart))
+      case _ => None
+    }
+  }
 }
 
 object PrivateAddress {
@@ -23,7 +33,16 @@ object PrivateAddress {
   /**
     * TODO: Implement User => (name, epost domain name)
     */
-  def unapply(user: User): Option[(String, String)] = ???
+  def unapply(user: User): Option[(String, String)] = {
+    user match {
+      case PkUser(_, address) =>
+        val parts: Array[String] = address.split("\\@")
+        val namePart = parts.head
+        val epdPart = parts.last
+        Some((namePart, epdPart))
+      case _ => None
+    }
+  }
 }
 
 class Exercise1 extends FlatSpec{
